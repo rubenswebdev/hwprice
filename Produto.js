@@ -8,6 +8,7 @@ var Schema = mongoose.Schema({
     parcelado: String,
     boleto: String,
     boletoAdicional: String,
+    loja: { type: mongoose.Schema.ObjectId, ref: 'Loja' },
     disponivel: { type: Boolean, default: false },
 });
 

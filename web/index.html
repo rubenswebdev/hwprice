@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>HW price</title>
+    <!-- build:css app.min.css -->
+    <!-- Bootstrap Core CSS -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bower_components/bootstrap-material-design/dist/css/material.min.css" rel="stylesheet">
+    <link href="bower_components/bootstrap-material-design/dist/css/material-fullpalette.min.css" rel="stylesheet">
+    <link href="bower_components/bootstrap-material-design/dist/css/roboto.min.css" rel="stylesheet">
+    <link href="bower_components/AngularJS-Toaster/toaster.min.css" rel="stylesheet">
+    <link href="bower_components/dropdown.js/jquery.dropdown.css" rel="stylesheet">
+    <link href="bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.css" rel="stylesheet" >
+    <!-- Custom Fonts -->
+    <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link href="assets/css/custom.css" rel="stylesheet" type="text/css">
+    <!-- endbuild -->
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body ng-app="app">
+    <toaster-container toaster-options="{'close-button': true, 'limit': 1}"></toaster-container>
+
+    <!-- Loading -->
+    <div class="loading-spiner-holder" data-loading >
+        <div class="container">
+            <div class="row">
+                    <div id="loading">
+                        <ul class="bokeh">
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <h3>Carregando...</h3>
+                        </ul>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <!-- //Loading -->
+
+
+        <!-- Navigation -->
+    <div  ui-view="nav">
+    </div>
+
+    <div class="container-fluid" ui-view>
+    </div> <!-- /container -->
+
+    <!-- build:js app.min.js -->
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="assets/js/angular-locale_pt-br.js"></script>
+
+    <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="bower_components/AngularJS-Toaster/toaster.min.js"></script>
+
+    <!-- Bootstrap Angular -->
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
+    <!-- Core -->
+    <script type="text/javascript" src="app/core/core.module.js"></script>
+    <script type="text/javascript" src="app/core/api.service.js"></script>
+    <script type="text/javascript" src="app/core/temp.service.js"></script>
+    <script type="text/javascript" src="app/core/loading.provider.js"></script>
+
+    <!-- MODULOS -->
+    <script type="text/javascript" src="app/app.module.js"></script>
+
+    <!-- Animes -->
+    <script type="text/javascript" src="app/modules/home/module.js"></script>
+    <script type="text/javascript" src="app/modules/home/controller.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="bower_components/bootstrap-material-design/dist/js/material.min.js"></script>
+    <script type="text/javascript" src="bower_components/bootstrap-material-design/dist/js/ripples.min.js"></script>
+    <!-- endbuild -->
+
+    <script type="text/javascript" src="config.js"></script>
+
+  </body>
+</html>
