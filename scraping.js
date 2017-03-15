@@ -22,6 +22,9 @@ var filaScrap = async.queue(function (task, next) {
     console.log(task);
     var parser = require('./' + task.nome);
     parser.extract(task.url).then(function (items) {
+
+        console.log('items', items);
+
         async.each(items, function (prod, nextE) {
             Produto.findOne({ id: prod.id, loja: task.loja }, function (err, produto) {
                 if (!produto) {
@@ -44,3 +47,5 @@ var filaScrap = async.queue(function (task, next) {
 
     });
 });
+
+filaScrap.drain = process.exit;

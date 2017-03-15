@@ -11,6 +11,9 @@ function HomeController(ApiService, toaster) {
     var apiRoute = '/home/';
     var stateDefault = 'home';
 
+    vm.buscar = buscar;
+    vm.buscarAll = buscarAll;
+
     vm.lojas = [];
 
     start();
@@ -19,6 +22,19 @@ function HomeController(ApiService, toaster) {
         ApiService.get('/api/lojas').then(function (lojas) {
             console.log(lojas);
             vm.lojas = lojas;
+        });
+    }
+
+    function buscar(loja) {
+        ApiService.post('/api/produtos-e', loja).then(function (produtos) {
+            loja.produtos = produtos;
+        });
+    }
+
+    function buscarAll() {
+        vm.lojas.forEach(function (loja) {
+            loja.termo = vm.termo;
+            buscar(loja);
         });
     }
 }

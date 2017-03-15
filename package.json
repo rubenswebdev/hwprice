@@ -11,6 +11,10 @@
   "dependencies": {
     "async": "^2.1.5",
     "blueimp-md5": "^2.7.0",
+    "body-parser": "^1.17.1",
+    "cors": "^2.8.1",
+    "elasticsearch": "^12.1.3",
+    "express": "^4.15.2",
     "moment": "^2.17.1",
     "mongoose": "^4.8.7",
     "q": "^1.4.1",

@@ -1,8 +1,33 @@
 <div ui-view>
+
+     <div class="row">
+        <hr>
+         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <input type="text" ng-model="vm.termo" class="form-control" placeholder="digite para buscar" ng-change="vm.buscarAll()"  ng-model-options="{ debounce: 500 }">
+         </div>
+     </div>
       <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <hr>
-            <input type="text" name="busca" class="form-control" placeholder="digite para buscar">
-        </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" ng-repeat="loja in vm.lojas">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{loja.nome}}</div>
+                    <div class="panel-body">
+                        <input type="text" ng-model="loja.termo" class="form-control" placeholder="digite para buscar" ng-change="vm.buscar(loja)"  ng-model-options="{ debounce: 500 }">
+                        <div class="list-group" ng-repeat="produto in loja.produtos">
+                          <a href="#" class="list-group-item active">
+                            <img height="80px" ng-src="{{produto.img}}" alt="">
+                            <p class="list-group-item-text">{{produto.title}}</p>
+                            <p class="text-success">{{produto.boleto}}</p>
+                            <p class="text-info">{{produto.parcelado}}</p>
+                            <p ng-if="!produto.disponivel" class="text-danger">Todos vendidos</p>
+                          </a>
+                        </div>
+<pre>
+{{loja.produtos[0]|json}}
+</pre>
+                    </div>
+                    <div class="panel-footer"></div>
+                </div>
+            </div>
       </div>
 </div>

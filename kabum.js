@@ -32,10 +32,10 @@ var xray = Xray({
   }
 });
 
-//var url = 'http://www.kabum.com.br/hardware/placas-mae';
+var url = 'http://www.kabum.com.br/hardware/placas-mae';
 //var url = 'http://www.kabum.com.br/hardware/processadores';
 //var url = 'http://www.kabum.com.br/hardware/placa-de-video-vga';
-
+extract(url);
 function extract(url) {
     var deferred = Q.defer();
 
@@ -103,6 +103,7 @@ function getItensPage(url) {
             disponivel: '.listagem-bots a:first-child@href | validaDisponivel'
         }
         ])(function(err, objs) {
+            console.log(objs[0].title);
             deferred.resolve(objs);
         });
     });

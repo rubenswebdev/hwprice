@@ -59,6 +59,7 @@ function extract(url) {
 }
 
 function getPages(url) {
+
     var deferred = Q.defer();
 
     var hoje = moment().format('DD-MM-YYYY');
@@ -71,8 +72,10 @@ function getPages(url) {
         })(function(err, res) {
             var urls = [];
 
-            for (var i = 1; i <= res.quantidade; i++) {
-                urls.push(url + '?p=' + i);
+            if (res) {
+                for (var i = 1; i <= res.quantidade; i++) {
+                    urls.push(url + '?p=' + i);
+                }
             }
 
             deferred.resolve(urls);
