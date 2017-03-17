@@ -8,34 +8,47 @@ var Q = require('q');
 var URL = require('url');
 
 var xray = Xray({
-  filters: {
-    match: function (value, regex, index) {
-        var reg = new RegExp(regex);
-        var mat = value.match(reg);
-        if (mat.length > index) {
-            return mat[index];
-        } else {
+    filters: {
+        match: function (value, regex, index) {
+            var reg = new RegExp(regex);
+            var mat = value.match(reg);
+            if (mat.length > index) {
+                return mat[index];
+            } else {
+                return value;
+            }
+        },
+
+        getLastPart: function (value) {
+            var parts = value.split('/');
+            return parts[parts.length - 1];
+        },
+
+        validaDisponivel: function (value) {
+            if (value !== 'Todos vendidos ') {
+                return true;
+            } else {
+                return false;
+            }
+        },
+
+        getFloat: function (value) {
+            if (value) {
+                value = value.replace('.', '');
+                value = value.replace(',', '.');
+                value = value.replace(/[^0-9,.]*/, '');
+                value = parseFloat(value);
+            }
+
             return value;
-        }
+        },
     },
-    getLastPart: function (value) {
-        var parts = value.split('/');
-        return parts[parts.length - 1];
-    },
-    validaDisponivel: function (value) {
-        if (value !== 'Todos vendidos ') {
-            return true;
-        } else {
-            return false;
-        }
-    }
-  }
 });
 
-//var url = 'http://www.terabyteshop.com.br/hardware/placas-de-video';
+var url = 'http://www.terabyteshop.com.br/hardware/placas-de-video';
 //var url = 'http://www.terabyteshop.com.br/hardware/processadores';
 //var url = 'http://www.terabyteshop.com.br/hardware/placas-mae';
-
+extract(url);
 function extract(url) {
     var deferred = Q.defer();
 
@@ -53,7 +66,7 @@ function extract(url) {
 
         fila.drain = function () {
             deferred.resolve(allItems);
-        }
+        };
     });
 
     return deferred.promise;
@@ -71,14 +84,14 @@ function getPages(urlOriginal, pag) {
 
         try {
             var bodyJson = JSON.parse(body);
-        } catch(err) {
+        } catch (err) {
         }
 
         if (bodyJson) {
             body = bodyJson.src + bodyJson.bpg;
         }
 
-        xray(body, '#pdmore@data-pg')(function(err, res) {
+        xray(body, '#pdmore@data-pg')(function (err, res) {
             if (res) {
                 return getPages(urlOriginal, res).then(function () {
                     var queryParts = URL.parse(url, true);
@@ -119,7 +132,7 @@ function getItensPage(url) {
 
         try {
             var bodyJson = JSON.parse(body);
-        } catch(err) {
+        } catch (err) {
         }
 
         if (bodyJson) {
@@ -134,10 +147,12 @@ function getItensPage(url) {
             title: '.commerce_columns_item_image:last-child@title',
             parcelado: '.prod-juros',
             boleto: '.prod-new-price span',
+            boletoValor: '.prod-new-price span | getFloat',
             boletoAdicional: '.prod-new-price small',
-            disponivel: '.tbt_esgotado | validaDisponivel'
-        }
-        ])(function(err, objs) {
+            disponivel: '.tbt_esgotado | validaDisponivel',
+        },
+        ])(function (err, objs) {
+            console.log(objs[0]);
             deferred.resolve(objs);
         });
     });

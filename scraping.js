@@ -34,8 +34,20 @@ var filaScrap = async.queue(function (task, next) {
                         nextE();
                     });
                 } else {
-                    console.log('Produto já cadastrado');
-                    nextE();
+                    produto.img = prod.img;
+                    produto.link = prod.link;
+                    produto.id = prod.id;
+                    produto.title = prod.title;
+                    produto.parcelado = prod.parcelado;
+                    produto.boleto = prod.boleto;
+                    produto.boletoAdicional = prod.boletoAdicional;
+                    produto.loja = task.loja;
+                    produto.disponivel = prod.disponivel;
+
+                    console.log('Produto Atualizado', produto);
+                    produto.save(function () {
+                        nextE();
+                    });
                 }
             });
         },

@@ -8,34 +8,48 @@ var Q = require('q');
 var URL = require('url');
 
 var xray = Xray({
-  filters: {
-    match: function (value, regex, index) {
-        var reg = new RegExp(regex);
-        var mat = value.match(reg);
-        if (mat.length > index) {
-            return mat[index];
-        } else {
+    filters: {
+        match: function (value, regex, index) {
+            var reg = new RegExp(regex);
+            var mat = value.match(reg);
+            if (mat.length > index) {
+                return mat[index];
+            } else {
+                return value;
+            }
+        },
+
+        getLastPart: function (value) {
+            var parts = value.split('/');
+            return parts[parts.length - 1];
+        },
+
+        validaDisponivel: function (value) {
+            if (value !== '#') {
+                return true;
+            } else {
+                return false;
+            }
+        },
+
+        getFloat: function (value) {
+            if (value) {
+                value = value.replace('.', '');
+                value = value.replace(',', '.');
+                value = value.replace(/[^0-9,.]*/, '');
+                value = parseFloat(value);
+            }
+
             return value;
-        }
+        },
     },
-    getLastPart: function (value) {
-        var parts = value.split('/');
-        return parts[parts.length - 1];
-    },
-    validaDisponivel: function (value) {
-        if (value !== '#') {
-            return true;
-        } else {
-            return false;
-        }
-    }
-  }
 });
 
-var url = 'http://www.kabum.com.br/hardware/placas-mae';
+//var url = 'http://www.kabum.com.br/hardware/placas-mae';
+
 //var url = 'http://www.kabum.com.br/hardware/processadores';
 //var url = 'http://www.kabum.com.br/hardware/placa-de-video-vga';
-extract(url);
+//extract(url);
 function extract(url) {
     var deferred = Q.defer();
 
@@ -53,7 +67,7 @@ function extract(url) {
 
         fila.drain = function () {
             deferred.resolve(allItems);
-        }
+        };
     });
 
     return deferred.promise;
@@ -68,10 +82,10 @@ function getPages(url) {
     withCache(hash, url).then(function (body) {
         xray(body, '.listagem-paginacao td:last-child', {
             url: 'a:last-child@href',
-        })(function(err, res) {
+        })(function (err, res) {
             var queryParts = URL.parse(url + res.url, true);
 
-             var urls = [];
+            var urls = [];
 
             for (var i = 1; i <= queryParts.query.pagina; i++) {
                 urls.push(url + '?pagina=' + i);
@@ -99,11 +113,12 @@ function getItensPage(url) {
             title: '.listagem-titulo_descr a',
             parcelado: '.listagem-preco12x',
             boleto: '.listagem-preco',
+            boletoValor: '.listagem-preco | getFloat',
             boletoAdicional: '.H-15desc',
-            disponivel: '.listagem-bots a:first-child@href | validaDisponivel'
-        }
-        ])(function(err, objs) {
-            console.log(objs[0].title);
+            disponivel: '.listagem-bots a:first-child@href | validaDisponivel',
+        },
+        ])(function (err, objs) {
+            console.log(objs[0]);
             deferred.resolve(objs);
         });
     });

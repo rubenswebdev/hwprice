@@ -7,34 +7,47 @@ var async = require('async');
 var Q = require('q');
 
 var xray = Xray({
-  filters: {
-    match: function (value, regex, index) {
-        var reg = new RegExp(regex);
-        var mat = value.match(reg);
-        if (mat.length > index) {
-            return mat[index];
-        } else {
+    filters: {
+        match: function (value, regex, index) {
+            var reg = new RegExp(regex);
+            var mat = value.match(reg);
+            if (mat.length > index) {
+                return mat[index];
+            } else {
+                return value;
+            }
+        },
+
+        getLastPart: function (value) {
+            var parts = value.split('/');
+            return parts[parts.length - 1];
+        },
+
+        validaDisponivel: function (value) {
+            if (value !== 'indisponível') {
+                return true;
+            } else {
+                return false;
+            }
+        },
+
+        getFloat: function (value) {
+            if (value) {
+                value = value.replace('.', '');
+                value = value.replace(',', '.');
+                value = value.replace(/[^0-9,.]*/, '');
+                value = parseFloat(value);
+            }
+
             return value;
-        }
+        },
     },
-    getLastPart: function (value) {
-        var parts = value.split('/');
-        return parts[parts.length - 1];
-    },
-    validaDisponivel: function (value) {
-        if (value !== 'indisponível') {
-            return true;
-        } else {
-            return false;
-        }
-    }
-  }
 });
 
 //var url = 'http://www.pichau.com.br/hardware/placa-de-video';
 //var url = 'http://www.pichau.com.br/hardware/processadores';
 //var url = 'http://www.pichau.com.br/hardware/placa-m-e';
-
+//extract(url);
 function extract(url) {
     var deferred = Q.defer();
 
@@ -52,7 +65,7 @@ function extract(url) {
 
         fila.drain = function () {
             deferred.resolve(allItems);
-        }
+        };
     });
 
     return deferred.promise;
@@ -69,7 +82,7 @@ function getPages(url) {
         xray(body, '.pager', {
             quantidade: 'p | match: .*\\d*.*\\s(\\d+), 1',
             ref: 'li a@href',
-        })(function(err, res) {
+        })(function (err, res) {
             var urls = [];
 
             if (res) {
@@ -100,10 +113,12 @@ function getItensPage(url) {
             title: '.title a@title',
             parcelado: '.other .valor',
             boleto: '.boleto .valor',
+            boletoValor: '.boleto .valor | getFloat',
             boletoAdicional: '.boleto .adicional',
-            disponivel: '.text-indisponivel | validaDisponivel'
-        }
-        ])(function(err, objs) {
+            disponivel: '.text-indisponivel | validaDisponivel',
+        },
+        ])(function (err, objs) {
+            console.log(objs[0]);
             deferred.resolve(objs);
         });
     });
