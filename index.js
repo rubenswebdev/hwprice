@@ -30,7 +30,7 @@ app.get('/api/lojas', function (req, res) {
 
 //db.produtos.createIndex( { title: "text" } );
 app.post('/api/produtos', function (req, res) {
-    Produto.find({ $text: { $search: '\"' + req.body.termo + '\"' }, loja: req.body._id, disponivel: true }, function (err, produtos) {
+    Produto.find({ $text: { $search: req.body.termo }, loja: req.body._id, disponivel: false }, function (err, produtos) {
         res.json(produtos);
     });
 });

@@ -26,7 +26,7 @@ function HomeController(ApiService, toaster) {
     }
 
     function buscar(loja) {
-        ApiService.post('/api/produtos-e', loja).then(function (produtos) {
+        ApiService.post('/api/produtos', loja).then(function (produtos) {
             loja.produtos = produtos;
         });
     }
